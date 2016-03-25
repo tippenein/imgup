@@ -3,7 +3,12 @@
 module Imgup where
 
 import qualified Configuration.Dotenv as Dotenv
+import Control.Lens
+import Data.Aeson
+import Data.Aeson.Lens
+import qualified Data.ByteString as BS
 import Data.Text as T
+import Data.Text.Encoding (encodeUtf8)
 import Network.Wreq
 import System.Directory (getCurrentDirectory, getHomeDirectory)
 import System.Environment (getArgs, getEnv)
@@ -13,24 +18,24 @@ imgupConfigPath = do
   homePath <- getHomeDirectory
   return (joinPath [homePath, ".imgup"])
 
--- data ImgupConfig
---   = ImgupConfig
---   { client_id :: String
---   }
-
--- fromDotenv :: [(String, String)] -> Maybe ImgupConfig
--- fromDotenv confVars = ImgupConfig <$> snd cid
---   where cid = select (\a -> "CLIENT_ID" == (fst a)) confVars
-
 clientId = do
-  Dotenv.loadFile False <$> imgupConfigPath
+  Dotenv.loadFile True =<< imgupConfigPath
   cid <- getEnv "CLIENT_ID"
-  return $ T.pack cid
+  return $ encodeUtf8 $ T.pack cid
 
-go = do
-  image <- getArgs
-  post "https://api.imgur.com/3/image.json"
-            [ partText "client_id" <$> clientId
-            , partText "type" "file"
-            , partFile "image" image
-            ]
+imagePath path = do
+  d <- getCurrentDirectory
+  return $ joinPath [d, path]
+
+uploadAndReturnUrl = do
+  (path:_) <- getArgs
+  image <- imagePath path
+  cid <- clientId
+  let authHeader = defaults & header "Authorization" .~ [BS.intercalate " " ["Client-ID", cid]]
+  let opts = [ partText "type" "file"
+             , partFile "image" image
+             ]
+
+  r <- postWith authHeader "https://api.imgur.com/3/image.json" opts
+  let id = r ^. responseBody . key "data" . key "id" . _String
+  print $ "http://imgur.com/" ++ T.unpack id

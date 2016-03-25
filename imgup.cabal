@@ -24,6 +24,10 @@ library
       Imgup
   build-depends:
       base ==4.*
+    , aeson
+    , lens
+    , bytestring
+    , lens-aeson
     , directory
     , filepath
     , dotenv
