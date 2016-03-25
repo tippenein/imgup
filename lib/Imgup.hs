@@ -38,4 +38,4 @@ uploadAndReturnUrl = do
 
   r <- postWith authHeader "https://api.imgur.com/3/image.json" opts
   let id = r ^. responseBody . key "data" . key "id" . _String
-  print $ "http://imgur.com/" ++ T.unpack id
+  return $ "http://imgur.com/" ++ T.unpack id

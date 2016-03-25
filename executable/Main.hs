@@ -3,4 +3,4 @@ module Main (main) where
 import qualified Imgup
 
 main :: IO ()
-main = Imgup.uploadAndReturnUrl
+main = putStrLn =<< Imgup.uploadAndReturnUrl
