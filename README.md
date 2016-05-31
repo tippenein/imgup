@@ -12,6 +12,10 @@ pipe it through `xsel` or `pbcopy` for auto copy to clipboard
 or you can upload your most recent screenshot anonymously with the `--screenshot` flag
 `imgup --screenshot |pbcopy`
 
+![screenshot example](screenshot_example.png)
+
+As of now this requires `Screen Shot*` as the naming convention _AND_ a 24 hour clock.
+
 Setup
 ===
 
