@@ -9,6 +9,9 @@ pipe it through `xsel` or `pbcopy` for auto copy to clipboard
 
 `imgup sloth.png | xsel`
 
+or you can upload your most recent screenshot anonymously with the `--screenshot` flag
+`imgup --screenshot |pbcopy`
+
 Setup
 ===
 
