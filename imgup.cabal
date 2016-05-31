@@ -28,6 +28,7 @@ library
     , lens
     , bytestring
     , lens-aeson
+    , Glob
     , directory
     , filepath
     , dotenv
