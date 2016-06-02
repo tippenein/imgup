@@ -7,9 +7,10 @@ returns a url to the anonymous photo upload
 
 pipe it through `xsel` or `pbcopy` for auto copy to clipboard
 
-`imgup sloth.png | xsel`
+`imgup sloth.png | pbcopy`
 
 or you can upload your most recent screenshot anonymously with the `--screenshot` flag
+
 `imgup --screenshot |pbcopy`
 
 ![screenshot example](screenshot_example.png)
