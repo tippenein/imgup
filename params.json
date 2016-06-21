@@ -1,0 +1,6 @@
+{
+  "name": "Imgup",
+  "tagline": "anonymously upload your most recent screenshot to imgur",
+  "body": "imgup\r\n=====\r\n\r\nUpload an image anonymously to imgur\r\n\r\nIt returns a url to the anonymous photo upload\r\n\r\npipe it through `xsel` or `pbcopy` for auto copy to clipboard\r\n\r\n`imgup sloth.png | pbcopy`\r\n\r\nor you can upload your most recent screenshot anonymously with the `--screenshot` flag\r\n\r\n`imgup --screenshot |pbcopy`\r\n\r\n![screenshot example](screenshot_example.png)\r\n\r\nAs of now this requires `Screen Shot*` as the naming convention _AND_ a 24 hour clock.\r\n\r\nSetup\r\n===\r\n\r\n1. stack install\r\n\r\n2. get a client_id for imgur\r\n\r\n3. `echo \"CLIENT_ID=<YOUR CLIENT-ID>\" > ~/.imgup`\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}

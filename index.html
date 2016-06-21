@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Imgup by tippenein</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <meta name="viewport" content="width=device-width">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Imgup</h1>
+        <p>anonymously upload your most recent screenshot to imgur</p>
+
+        <p class="view"><a href="https://github.com/tippenein/imgup">View the Project on GitHub <small>tippenein/imgup</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/tippenein/imgup/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/tippenein/imgup/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/tippenein/imgup">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a id="imgup" class="anchor" href="#imgup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>imgup</h1>
+
+<p>Upload an image anonymously to imgur</p>
+
+<p>It returns a url to the anonymous photo upload</p>
+
+<p>pipe it through <code>xsel</code> or <code>pbcopy</code> for auto copy to clipboard</p>
+
+<p><code>imgup sloth.png | pbcopy</code></p>
+
+<p>or you can upload your most recent screenshot anonymously with the <code>--screenshot</code> flag</p>
+
+<p><code>imgup --screenshot |pbcopy</code></p>
+
+<p><img src="screenshot_example.png" alt="screenshot example"></p>
+
+<p>As of now this requires <code>Screen Shot*</code> as the naming convention <em>AND</em> a 24 hour clock.</p>
+
+<h1>
+<a id="setup" class="anchor" href="#setup" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Setup</h1>
+
+<ol>
+<li><p>stack install</p></li>
+<li><p>get a client_id for imgur</p></li>
+<li><p><code>echo "CLIENT_ID=&lt;YOUR CLIENT-ID&gt;" &gt; ~/.imgup</code></p></li>
+</ol>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/tippenein">tippenein</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
