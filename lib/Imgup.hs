@@ -8,6 +8,7 @@ import Data.Aeson.Lens
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
 import Data.List (sortBy)
+import Data.Maybe (fromMaybe)
 import Data.Monoid
 import qualified Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
@@ -17,11 +18,33 @@ import System.Environment (getArgs, getEnv)
 import System.FilePath (joinPath, takeExtension, takeFileName)
 import System.FilePath.Glob (compile, globDir1)
 
-clientId :: IO BS.ByteString
-clientId = do
+data Config
+  = Config
+  { _client_id :: BS.ByteString
+  , _pattern :: String
+  , _from_directory :: String
+  }
+
+getConfig :: IO Config
+getConfig = do
   Dotenv.loadFile True =<< fromHome ".imgup"
-  cid <- getEnv "CLIENT_ID"
-  return $ encodeUtf8 $ T.pack cid
+  cid <- getEnvBS "CLIENT_ID"
+  pat <- getEnvDefault "PATTERN" "*.png"
+  d <- getEnvDefault "FROM_DIRECTORY" "Desktop"
+  return $ Config cid pat d
+    where
+      getEnvDefault a b = fromMaybe b <$> getEnv' a
+
+      getEnv' a = do
+        e <- getEnv a
+        let e' = if e == "" then Nothing else Just e
+        return e'
+
+      getEnvBS s = do
+        e <- getEnv s
+        pure $ encodeUtf8 $ T.pack e
+
+
 
 fromHome :: String -> IO FilePath
 fromHome p = do
@@ -30,8 +53,9 @@ fromHome p = do
 
 getRecentPath :: IO FilePath
 getRecentPath = do
-  d <- fromHome "Desktop"
-  files <- globDir1 (compile "Screen Shot*") d
+  conf <- getConfig
+  d <- fromHome $ _from_directory conf
+  files <- globDir1 (compile (_pattern conf)) d
   case headMaybe (sortBy (flip compare) files) of
     Nothing -> error "no recent screenshots"
     Just a -> return a
@@ -57,8 +81,8 @@ parseArgs = do
 uploadAndReturnUrl :: IO String
 uploadAndReturnUrl = do
   imagePath <- parseArgs
-  cid <- clientId
-  let authHeader = defaults & header "Authorization" .~ ["Client-ID" <> " " <> cid]
+  conf <- getConfig
+  let authHeader = defaults & header "Authorization" .~ ["Client-ID" <> " " <> _client_id conf]
   let opts = [ partText "type" "file"
              , partFile "image" imagePath
              ]
