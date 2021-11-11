@@ -3,13 +3,13 @@
 module Imgup (uploadAndReturnUrl) where
 
 import qualified Configuration.Dotenv as Dotenv
+import Configuration.Dotenv (Config(..))
 import Control.Lens
 import Data.Aeson.Lens
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as LBS
 import Data.List (sortBy)
 import Data.Maybe (fromMaybe)
-import Data.Monoid
 import qualified Data.Text as T
 import Data.Text.Encoding (encodeUtf8)
 import Network.Wreq
@@ -18,33 +18,32 @@ import System.Environment (getArgs, getEnv)
 import System.FilePath (joinPath, takeExtension, takeFileName)
 import System.FilePath.Glob (compile, globDir1)
 
-data Config
-  = Config
+data ImgupConfig
+  = ImgupConfig
   { _client_id :: BS.ByteString
   , _pattern :: String
   , _from_directory :: String
   }
 
-getConfig :: IO Config
+getConfig :: IO ImgupConfig
 getConfig = do
-  Dotenv.loadFile True =<< fromHome ".imgup"
+  p <- fromHome ".imgup"
+  _ <- Dotenv.loadFile (Dotenv.Config { configPath = [ p ], configExamplePath = [], configOverride = True})
   cid <- getEnvBS "CLIENT_ID"
   pat <- getEnvDefault "PATTERN" "*.png"
   d <- getEnvDefault "FROM_DIRECTORY" "Desktop"
-  return $ Config cid pat d
-    where
-      getEnvDefault a b = fromMaybe b <$> getEnv' a
+  pure $ ImgupConfig cid pat d
+  where
+    getEnvDefault a b = fromMaybe b <$> getEnv' a
 
-      getEnv' a = do
-        e <- getEnv a
-        let e' = if e == "" then Nothing else Just e
-        return e'
+    getEnv' a = do
+      e <- getEnv a
+      let e' = if e == "" then Nothing else Just e
+      return e'
 
-      getEnvBS s = do
-        e <- getEnv s
-        pure $ encodeUtf8 $ T.pack e
-
-
+    getEnvBS s = do
+      e <- getEnv s
+      pure $ encodeUtf8 $ T.pack e
 
 fromHome :: String -> IO FilePath
 fromHome p = do
